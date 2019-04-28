@@ -4,6 +4,79 @@
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 </head>
 
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+<script type="text/javascript">	
+ 
+	//Ganacheのデフォルトのポート番号は7545
+	const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+		
+	//コントラクトを呼び出すアカウントのアドレス
+	let coinbase = web3.eth.accounts[1];
+	
+	//コントラクトのアドレス
+	const address = "0xc44a36f0e424c8a05f2817f1c1f05ac649016c34";
+	//ABI情報
+	const abi =[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_name",
+				"type": "string"
+			}
+		],
+		"name": "set",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "get",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+
+	
+]	
+
+	
+	//コントラクトのインスタンスを生成
+	const contract = web3.eth.contract(abi).at(address);
+	
+	//トランザクションの実行（コントラクトのset関数を実行）
+	let response = contract.set.sendTransaction("hanako",{from:coinbase,gas:3000000});
+	console.log("response:",response); //responseにはトランザクションのハッシュ値が返ってくる
+	
+	//コントラクトのget関数を実行
+	let name = contract.get.call();
+	console.log("name:",name); //hanako
+    
+</script>
+
 <div>
     <h1><a href="/">Django Girls Blog</a></h1>
 </div>
@@ -15,3 +88,19 @@
         <p>{{ post.text|linebreaksbr }}</p>
     </div>
 {% endfor %}
+
+
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>HTML入門-テキストボックスの作成</title>
+</head>
+<body>
+<form action="#" method="post">
+<p>deposit額：<br>
+<input type="text" name="name"></p>
+<p><input type="button" value="送金する" id="button2"></p>
+</form>
+</body>
+</html>
+
